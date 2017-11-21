@@ -24,14 +24,14 @@ Payment Method Feature:
 
 ### Minimum Requirements
 
-This plugin is tested with Woocommerce version 2.5.5
-Wordpress version 4.4.2
-PHP version 5.4 or greater
+This plugin is tested with Woocommerce version 3.2.3
+Wordpress version 4.8.3
+PHP version 7.1.10
 
 Woocommerce standard checkout (Onepage Checkout)
 Manual Instalation
 
-Extract the Woocommerce-master.zip
+Extract the woocommerce_espay-woo.v3.zip
 
 Locate the root Woocommerce directory of your shop via FTP connection
 
