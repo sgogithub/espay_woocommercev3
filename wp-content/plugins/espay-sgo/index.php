@@ -70,16 +70,20 @@ function woocommerce_espay_init() {
 //            $this->fee = $this->settings['fee'];
             $this->fee_bca_klikpay = $this->settings['fee_bca_klikpay'];
             $this->fee_bri = $this->settings['fee_bri'];
+            $this->fee_bri_atm = $this->settings['fee_bri_atm'];
             $this->fee_mandiri_ib = $this->settings['fee_mandiri_ib'];
             $this->fee_mandiri_ecash = $this->settings['fee_mandiri_ecash'];
+            $this->fee_mandiri_atm = $this->settings['fee_mandiri_atm'];
             $this->fee_credit_card = $this->settings['fee_credit_card'];
             $this->fee_permata_atm = $this->settings['fee_permata_atm'];
             $this->fee_danamon_atm = $this->settings['fee_danamon_atm'];
             $this->fee_danamon_ob = $this->settings['fee_danamon_ob'];
+            $this->fee_cimb_atm = $this->settings['fee_cimb_atm'];
             $this->fee_dki_ib = $this->settings['fee_dki_ib'];
             $this->fee_xl_tunai = $this->settings['fee_xl_tunai'];
             $this->fee_bii_atm = $this->settings['fee_bii_atm'];
             $this->fee_bnidbo = $this->settings['fee_bnidbo'];
+            $this->fee_bni_atm = $this->settings['fee_bni_atm'];
             $this->fee_permata_net_pay = $this->settings['fee_permata_net_pay'];
             $this->fee_nobupay = $this->settings['fee_nobupay'];
             $this->fee_finpay = $this->settings['fee_finpay'];
@@ -235,6 +239,14 @@ function woocommerce_espay_init() {
                     'default' => '0',
                     'desc_tip' => true
                 ),
+                'fee_bri_atm' => array(
+                    'title' => __('Transaction Fee BRI ATM', 'woocommerce'),
+                    'type' => 'price',
+                    'placeholder' => wc_format_localized_price(0),
+                    'description' => __('', 'woocommerce'),
+                    'default' => '0',
+                    'desc_tip' => true
+                ),
                 'fee_mandiri_ib' => array(
                     'title' => __('Transaction Fee Mandiri Internet Banking', 'woocommerce'),
                     'type' => 'price',
@@ -245,6 +257,14 @@ function woocommerce_espay_init() {
                 ),
                 'fee_mandiri_ecash' => array(
                     'title' => __('Transaction Fee Mandiri Ecash', 'woocommerce'),
+                    'type' => 'price',
+                    'placeholder' => wc_format_localized_price(0),
+                    'description' => __('', 'woocommerce'),
+                    'default' => '0',
+                    'desc_tip' => true
+                ),
+                'fee_mandiri_atm' => array(
+                    'title' => __('Transaction Fee Mandiri ATM', 'woocommerce'),
                     'type' => 'price',
                     'placeholder' => wc_format_localized_price(0),
                     'description' => __('', 'woocommerce'),
@@ -283,6 +303,14 @@ function woocommerce_espay_init() {
                     'default' => '0',
                     'desc_tip' => true
                 ),
+                'fee_cimb_atm' => array(
+                    'title' => __('Transaction Fee CIMB ATM', 'woocommerce'),
+                    'type' => 'price',
+                    'placeholder' => wc_format_localized_price(0),
+                    'description' => __('', 'woocommerce'),
+                    'default' => '0',
+                    'desc_tip' => true
+                ),
                 'fee_dki_ib' => array(
                     'title' => __('Transaction Fee DKI Internet Banking', 'woocommerce'),
                     'type' => 'price',
@@ -309,6 +337,14 @@ function woocommerce_espay_init() {
                 ),
                 'fee_bnidbo' => array(
                     'title' => __('Transaction Fee BNI Debit Online', 'woocommerce'),
+                    'type' => 'price',
+                    'placeholder' => wc_format_localized_price(0),
+                    'description' => __('', 'woocommerce'),
+                    'default' => '0',
+                    'desc_tip' => true
+                ),
+                'fee_bni_atm' => array(
+                    'title' => __('Transaction Fee BNI ATM', 'woocommerce'),
                     'type' => 'price',
                     'placeholder' => wc_format_localized_price(0),
                     'description' => __('', 'woocommerce'),
@@ -567,7 +603,7 @@ function woocommerce_espay_init() {
 
             $urlsite = get_site_url();
 
-            if ($productCode == 'PERMATAATM' || $productCode == 'MUAMALATATM' || $productCode == 'BIIATM' || $productCode == 'FINPAY195') {
+            if ($productCode == 'PERMATAATM' || $productCode == 'MUAMALATATM' || $productCode == 'BIIATM'  || $productCode == 'BCAATM' || $productCode == 'BNIATM' || $productCode == 'MANDIRIATM' || $productCode == 'BRIATM' || $productCode == 'CIMBATM' || $productCode == 'FINPAY195') {
                 $urlplugin = '/wp-content/plugins/espay-sgo/notif/notif-atm.php?order=' . $order_id_get . '';
             } else {
                 $urlplugin = '/wp-content/plugins/espay-sgo/notif/notif-ib.php?order=' . $order_id_get . '';
@@ -603,7 +639,7 @@ function woocommerce_espay_init() {
                 $amountFinish = (($amountcredit * $creditcardfee) / 100) + $fee;
                 $totalamount = $amount + $amountFinish; //disc rate
             } else {
-                if ($productCode == 'BCAKLIKPAY') {
+                if ($productCode == 'BCAATM') {
                     $fee = ($this->fee_bca_klikpay == '') ? 0 : $this->fee_bca_klikpay;
                 } elseif ($productCode == 'XLTUNAI') {
                     $fee = ($this->fee_xl_tunai == '') ? 0 : $this->fee_xl_tunai;
@@ -611,12 +647,16 @@ function woocommerce_espay_init() {
                     $fee = ($this->fee_bii_atm == '') ? 0 : $this->fee_bii_atm;
                 } elseif ($productCode == 'BNIDBO') {
                     $fee = ($this->fee_bnidbo == '') ? 0 : $this->fee_bnidbo;
+                } elseif ($productCode == 'BNIATM') {
+                    $fee = ($this->fee_bni_atm == '') ? 0 : $this->fee_bni_atm;
                 } elseif ($productCode == 'DANAMONOB') {
                     $fee = ($this->fee_danamon_ob == '') ? 0 : $this->fee_danamon_ob;
                 } elseif ($productCode == 'DKIIB') {
                     $fee = ($this->fee_dki_ib == '') ? 0 : $this->fee_dki_ib;
                 } elseif ($productCode == 'MANDIRIIB') {
                     $fee = ($this->fee_mandiri_ib == '') ? 0 : $this->fee_mandiri_ib;
+                } elseif ($productCode == 'MANDIRIATM') {
+                    $fee = ($this->fee_mandiri_atm == '') ? 0 : $this->fee_mandiri_atm;
                 } elseif ($productCode == 'MANDIRIECASH') {
                     $fee = ($this->fee_mandiri_ecash == '') ? 0 : $this->fee_mandiri_ecash;
                 } elseif ($productCode == 'FINPAY195') {
@@ -633,10 +673,14 @@ function woocommerce_espay_init() {
                     $fee = ($this->fee_permata_atm == '') ? 0 : $this->fee_permata_atm;
                 } elseif ($productCode == 'EPAYBRI') {
                     $fee = ($this->fee_bri == '') ? 0 : $this->fee_bri;
+                } elseif ($productCode == 'BRIATM') {
+                    $fee = ($this->fee_bri_atm == '') ? 0 : $this->fee_bri_atm;
                 } elseif ($productCode == 'PERMATANETPAY') {
                     $fee = ($this->fee_permata_net_pay == '') ? 0 : $this->fee_permata_net_pay;
                 } elseif ($productCode == 'DANAMONATM') {
                     $fee = ($this->fee_danamon_atm == '') ? 0 : $this->fee_danamon_atm;
+                } elseif ($productCode == 'CIMBATM') {
+                    $fee = ($this->fee_cimb_atm == '') ? 0 : $this->fee_cimb_atm;
                 } elseif ($productCode == 'BITCOIN') {
                     $fee = ($this->fee_bitcoin == '') ? 0 : $this->fee_bitcoin;
                 } else {
@@ -776,7 +820,7 @@ function woocommerce_espay_init() {
                         SGOSignature.receiveForm();
                     };
                 </script>
-                <iframe id="sgoplus-iframe" src="" scrolling="no" allowtransparency="true" frameborder="0" height="300"></iframe>
+                <iframe id="sgoplus-iframe" sandbox="allow-scripts allow-top-navigation" src="" scrolling="no" allowtransparency="true" frameborder="0" height="300"></iframe>
                 <?php
             }
         }
