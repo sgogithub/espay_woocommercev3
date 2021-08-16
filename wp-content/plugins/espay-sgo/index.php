@@ -820,7 +820,7 @@ function woocommerce_espay_init() {
                         SGOSignature.receiveForm();
                     };
                 </script>
-                <iframe id="sgoplus-iframe" sandbox="allow-scripts allow-top-navigation" src="" scrolling="no" allowtransparency="true" frameborder="0" height="300"></iframe>
+                <iframe id="sgoplus-iframe" sandbox="allow-same-origin allow-scripts allow-top-navigation"  src="" scrolling="no" allowtransparency="true" frameborder="0" height="300"></iframe>
                 <?php
             }
         }
